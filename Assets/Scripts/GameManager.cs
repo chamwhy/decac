@@ -21,8 +21,13 @@ TODO
 
 public class GameManager : MonoBehaviour
 {
+    public PlayerMove playerMove;
+    public CamMove camMove;
+    public LevelEditor levelEditor;
+
     public TextMeshProUGUI scoreText;
     private int score;
+    private IEnumerator scoreCoroutine;
 
     //Animations
     public Animator scoreAnim;
@@ -33,6 +38,10 @@ public class GameManager : MonoBehaviour
 
     private void Awake(){
         Debug.Log("Game Start!");
+    }
+
+    private void Start() {
+        scoreCoroutine = ScoreLoop();
     }
 
     //1 default logic
@@ -47,7 +56,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void StartScoreLoop(){
-        StartCoroutine(ScoreLoop());
+        StartCoroutine(scoreCoroutine);
     }
 
     private void StartAnim(Animator[] animators, string type){
@@ -85,7 +94,8 @@ public class GameManager : MonoBehaviour
 
     //Btn Events
     public void StartGame(){
-        
+        OffAnim("start");
+        scoreAnim.SetTrigger("on");
         Invoke("StartScoreLoop", 3f);
     }
     public void Respawn(){
@@ -105,6 +115,13 @@ public class GameManager : MonoBehaviour
 
     public void NextBall(){
 
+    }
+
+    //Events
+
+    public void Dead(){
+        camMove.followingPlayer = false;
+        OnAnim("dead");
     }
     //4 반응
     
