@@ -24,7 +24,11 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     private int score;
 
-
+    //Animations
+    public Animator scoreAnim;
+    public Animator[] startAnims;
+    public Animator[] deadAnims;
+    public Animator[] changeAnims;
 
 
     private void Awake(){
@@ -37,7 +41,7 @@ public class GameManager : MonoBehaviour
         score += plus;
     }
 
-    IEnumerator ScoreLoop (){
+    IEnumerator ScoreLoop(){
         score += 1;
         yield return new WaitForSeconds(1f);
     }
@@ -45,8 +49,43 @@ public class GameManager : MonoBehaviour
     private void StartScoreLoop(){
         StartCoroutine(ScoreLoop());
     }
+
+    private void StartAnim(Animator[] animators, string type){
+        for(int i = 0; i < animators.Length; i++){
+            animators[i].SetTrigger(type);
+        }
+    }
+    private void OnAnim(string type){
+        switch(type){
+            case "start":
+                StartAnim(startAnims, "on");
+                break;
+            case "dead":
+                StartAnim(deadAnims, "on");
+                break;
+            case "change":
+                StartAnim(changeAnims, "on");
+                break;
+        }
+    }
+
+    private void OffAnim(string type){
+        switch(type){
+            case "start":
+                StartAnim(startAnims, "off");
+                break;
+            case "dead":
+                StartAnim(deadAnims, "off");
+                break;
+            case "change":
+                StartAnim(changeAnims, "off");
+                break;
+        }
+    }
+
     //Btn Events
     public void StartGame(){
+        
         Invoke("StartScoreLoop", 3f);
     }
     public void Respawn(){
