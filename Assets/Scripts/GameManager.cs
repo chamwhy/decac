@@ -121,6 +121,7 @@ public class GameManager : MonoBehaviour
 
     public void Dead(){
         camMove.followingPlayer = false;
+        StopCoroutine(scoreCoroutine);
         OnAnim("dead");
     }
     //4 반응
